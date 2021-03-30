@@ -22,7 +22,8 @@ app.set('view engine', 'ejs');
 mongoose.connect('mongodb://localhost:27017/spotify-api-project', 
 {
     useNewUrlParser: true, 
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -52,14 +53,13 @@ app.get('/login', (req, res) =>
     res.redirect(
         'https://accounts.spotify.com/authorize?'+
         queryString.stringify(
-            {
-                client_id: client_id,
-                response_type: 'code',
-                redirect_uri: redirect_uri,
-                state: state,
-                scope: sc
-            }
-        )
+        {
+            client_id: client_id,
+            response_type: 'code',
+            redirect_uri: redirect_uri,
+            state: state,
+            scope: sc
+        })
     );
 });
 
@@ -91,9 +91,9 @@ app.get('/callback', (req,res) =>
             json: true
         };
 
-        request.post(authOptions, function (error, response, body) {
+        request.post(authOptions, function (error, response, body) 
+        {    
             
-
             if (!error && response.statusCode === 200) 
             {
                 const access_token = body.access_token
@@ -107,7 +107,6 @@ app.get('/callback', (req,res) =>
                   json: true
                 };
                 request.get(options, function(error, response, body) {
-                    //console.log(body);
                     res.send(body);
                 });
             }      
@@ -127,7 +126,7 @@ app.get('/refresh_token', function(req, res) {
       },
       json: true
     };
-  
+    
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
         const access_token = body.access_token;
@@ -142,8 +141,6 @@ app.get('/error', (req,res) =>
 {
     res.send(req.query.error);
 });
-
-
 
 app.listen(8080, () => 
 {
