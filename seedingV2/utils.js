@@ -40,7 +40,10 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         //console.log(data);
-        return data.artists.items[0].id;
+        return {
+            followers: data.artists.items[0].followers.total,
+            popularity: data.artists.items[0].popularity
+        };
     }
 
     const _getArtistAlbums = async (token, artistId, offset) =>
@@ -62,6 +65,8 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         const albums = [];
+
+        if(data.items.length > 0)
         for(let album of data.items)
         {
             albums.push(album.id);
@@ -90,9 +95,11 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         let tracks = [];
+        if(data.albums.length > 0)
         for(let album of data.albums)
         {
-            if(album.tracks)
+            if(album)
+            if(album.tracks != null)
             {
                 for(let track of album.tracks.items)
                 {
@@ -128,19 +135,22 @@ const APIControler = async () =>
         getToken(){ return _getToken() },
         getArtist(token, artistName){ return _getArtist(token, artistName) },
         getArtistAlbums(token, artistId, offset){ return _getArtistAlbums(token,artistId, offset) },
-        getTracksAndAlbums(token, albumIds){ return _getTracksAndArtists(token, albumIds) }
+        getTracksAndArtists(token, albumIds){ return _getTracksAndArtists(token, albumIds) }
     };
 };
 
-module.exports.getData = async (artistId, offset) =>
+module.exports.getData = async (artistId, offset) => //artistName,
 {
     const control = await APIControler();
     const token = await control.getToken();
-    //const artistId = await control.getArtist(token, 'Juice WRLD');
+    //const artistInfo = await control.getArtist(token, artistName);
     const albums = await control.getArtistAlbums(token, artistId, offset);
-    const tracks = await control.getTracksAndAlbums(token, albums.albums);
+    const tracks = await control.getTracksAndArtists(token, albums.albums);
 
-    return {tracks: tracks, _offset: albums._offset};
+    return {
+        tracks: tracks, 
+        _offset: albums._offset,
+    };
 };
 //4MCBfE4596Uoi2O4DtmEMz
 //getData('4MCBfE4596Uoi2O4DtmEMz');
