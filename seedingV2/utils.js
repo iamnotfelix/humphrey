@@ -65,7 +65,7 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         const albums = [];
-
+        //console.log(artistId);
         if(data.items.length > 0)
         for(let album of data.items)
         {
