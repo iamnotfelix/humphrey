@@ -22,109 +22,16 @@ db.once('open', function() {
   console.log('Database connected');
 });
 
-//legacy code
-/*
-const juice = '4MCBfE4596Uoi2O4DtmEMz';
-
-
-const seedDBf = async () =>
-{
-    await Artist.deleteMany({});
-
-    let queue = [];
-
-    queue.push(juice);
-
-    const art = new Artist({
-        name: 'Juice WRLD',
-        artistId: '4MCBfE4596Uoi2O4DtmEMz',
-        degree: 0
-    });
-    await art.save();
-
-    for( let i = 1; i <= 2; i++ )
-    {
-        let tmpQueue = [];
-        console.log('Degree:',i);
-        while(queue.length > 0)
-        {
-            const fatherId = queue.pop();
-
-            let off;
-            let offset = 0;
-            do
-            {
-                const data = await getData(fatherId, offset);
-                let contor = 0;
-
-                data.tracks.forEach(element => {
-                    contor += (element.artists.length - 1);
-                });
-                console.log(data.tracks[0].artists[0].artistName, contor);
-
-                const tracks = data.tracks;
-                off = data._offset;
-                for(let track of tracks)
-                {
-                    for(let a of track.artists)
-                    {   
-                        if(a.artistId != fatherId)
-                        {
-                            const found = await Artist.find({artistId: a.artistId});
-                            
-                            if(found.length == 0)
-                            {
-                                
-                                const newAritstObject = 
-                                {
-                                    artistId: a.artistId,
-                                    name: a.artistName,
-                                    degree: i,
-                                    artistReach: [
-                                        {
-                                            trackId: track.trackId,
-                                            trackName: track.trackName,
-                                            artistId: fatherId
-                                        }
-                                    ]
-                                }
-                                tmpQueue.push(newAritstObject.artistId);
-
-                                const newArtist = new Artist(newAritstObject);
-                                await newArtist.save();
-                            }
-                            else
-                            {
-                                const add = 
-                                {
-                                    trackId: track.trackId,
-                                    trackName: track.trackName,
-                                    artistId: fatherId
-                                }
-                                await Artist.findOneAndUpdate({_id: found._id}, { $push: { artistReach: add }});
-                            }
-                        }
-                    }
-                }
-                offset += 20;
-                //console.log(off, offset);
-            }while(offset < off);
-        }
-        queue = tmpQueue;
-    }
-
-}
-*/
-
-
 const getAllData = async (id) =>                                    //get all the tracks from all offsets
 {
     let offset = 0;
     let offsetLimit = 20;
     let tracks = [];
+    let token = undefined;
     while(offset <= offsetLimit)
     {
-        const data = await getData(id, offset);
+        const data = await getData(id, offset, token);
+        token = data.token;
         offsetLimit = data._offset;
         data.tracks.forEach( element => tracks.push(element) );
         offset +=20;
@@ -160,8 +67,9 @@ const seedDB = async () =>
     const restIds = cache.ids;
     const wasError = cache.error; 
 
-    if(wasError || currentDegree === 0) await Artist.deleteMany({degree: {$gte: currentDegree} });
-    else await Artist.deleteMany({degree: {$gt: currentDegree} });
+    //if(wasError || currentDegree === 0) await Artist.deleteMany({degree: {$gte: currentDegree} });
+    //else 
+        //await Artist.deleteMany({degree: {$gt: currentDegree} });
     if(currentDegree === 0)
     {
         const art = new Artist({
@@ -185,17 +93,19 @@ const seedDB = async () =>
     {
         const data = await getAllData(id);                      //gets an array of all the tracks of the current artist
         //console.log(data);
+        let i = 1;
         for(let track of data)                                  //iterrate over all tracks
         {
+            if(i === 20) break;
             for(let artist of track.artists)                    //iterrate over all the artists on the current track
             {   
                 if(artist.artistId != id)                       //check if the current artist is different from the father
                 {
                     const found = await Artist.find({artistId: artist.artistId});   //search the artist in the database
                         
-                    if(found.length == 0)                       //if the artist is new
+                    if(found.length === 0)                       //if the artist is new
                     {   
-                        const newAritstObject =                 //create a new artist object
+                        const newArtist = new Artist(                //create a new artist object
                         {
                             artistId: artist.artistId,
                             name: artist.artistName,
@@ -208,9 +118,8 @@ const seedDB = async () =>
                                     artistId: id
                                 }
                             ]
-                        }
-
-                        const newArtist = new Artist(newAritstObject);  //make an Artist object with the artist object 
+                        });
+                        i++;
                         await newArtist.save();                         //save to db
                     }
                     else                                        //if the artist is not new
@@ -226,6 +135,9 @@ const seedDB = async () =>
                 }
             }
         }
+        const index = forError.indexOf(id);
+        if(index > -1)
+            forError.splice(index, 1);
     }
 }
 
@@ -246,3 +158,6 @@ seedDB().then(() => {
     const results = perf.stop();
     console.log(results.preciseWords);
 });
+
+
+//possible bug: some artist are reaching to the same degree of artist  

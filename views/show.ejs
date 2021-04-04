@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <% for(let track of result.links) {%>
+        <h3><%= track.trackName %> </h3>
+        <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> 
+    <%} %> 
+    <!-- <iframe src="https://open.spotify.com/embed/track/285pBltuF7vW8TeWk8hdRR" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
+</body>
+</html>

@@ -15,7 +15,8 @@ const artistSchema = new Schema({
     {
         type: Number
     },
-    artistReach: [
+    artistReach: 
+    [
         {
             trackId:
             {

@@ -10,6 +10,7 @@ const APIControler = async () =>
     {
         const url = 'https://accounts.spotify.com/api/token';
         const client = Buffer.from(client_id + ':' + client_secret).toString('base64');
+        
         const options = 
         {
             method: 'POST',
@@ -22,6 +23,7 @@ const APIControler = async () =>
         }   
         const result = await fetch(url, options);
         const data = await result.json();//console.log(data.access_token);
+        //console.log(data);
         return data.access_token;  
     }
 
@@ -51,8 +53,6 @@ const APIControler = async () =>
         
         const market = 'RO';
         const limit = 20;
-        const include_group = 'album,single';//include_group=${include_group}
-        //const offset = '';
         const url = `https://api.spotify.com/v1/artists/${artistId}/albums?market=${market}&limit=${limit}&offset=${offset}&include_groups=album,single`;
         const options = 
         {
@@ -65,7 +65,7 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         const albums = [];
-        //console.log(artistId);
+        //console.log(data);
         if(data.items.length > 0)
         for(let album of data.items)
         {
@@ -118,7 +118,7 @@ const APIControler = async () =>
                     let egal = false;
                     if(tracks)
                     {
-                        tracks.forEach(element => egal = (egal || (trackArtist.trackName == element.trackName)));
+                        tracks.forEach((element) => { egal = (egal || (trackArtist.trackName == element.trackName)); });
                     }
 
                     if(!egal)
@@ -139,23 +139,23 @@ const APIControler = async () =>
     };
 };
 
-module.exports.getData = async (artistId, offset) => //artistName,
+module.exports.getData = async (artistId, offset, tok = undefined) => //artistName,
 {
     const control = await APIControler();
-    const token = await control.getToken();
-    //const artistInfo = await control.getArtist(token, artistName);
+    let token;
+    if(tok) token = tok;
+    else token = await control.getToken();
+    //console.log(token);
     const albums = await control.getArtistAlbums(token, artistId, offset);
     const tracks = await control.getTracksAndArtists(token, albums.albums);
 
     return {
         tracks: tracks, 
         _offset: albums._offset,
+        token: token
     };
 };
 //4MCBfE4596Uoi2O4DtmEMz
-//getData('4MCBfE4596Uoi2O4DtmEMz');
-//still not working. I need to make another async, then await the initialization
-//console.log(dataCenter());
 /*
 example of what i need to do in other file if i include these functions:
 const asdf = async () =>
