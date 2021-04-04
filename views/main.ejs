@@ -4,15 +4,57 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="main.css">
+    <title>Humphrey</title>
 </head>
 <body>
-    <h1>Main Page</h1>
-    <p>Find out how close is your favorite artist to Juice WRLD</p>
-    <form action="/search" method="POST">
-        <label for="search">Search an artist</label>
-        <input type="text" id="search" placeholder="ex. Future" name="search">
-        <button>Submit</button>
-    </form>
+    <div class="container">
+        <div class="innerContainer">
+            <div class="element">
+                <p class="logo">Humphrey</p>
+            </div>
+            <div class="element">
+                <p class="text">How close is your favorite artist to Juice WRLD?</p>
+            </div>
+                <form action="/search" method="POST" class="formContainer">
+                    <div class="formElement text">
+                        <label for="search">Search an artist</label>
+                    </div>
+                    <div class="inputElement">
+                        <input type="text" id="search" placeholder="Search an artist" name="search">
+                    </div>
+                    <div class="formElement">
+                        <button class="btn">Search</button>
+                    </div>
+                </form>
+        </div>
+    </div>
+
+    <div class="resultContainer">
+        <% if(result) {%>
+            <p class="resultText"><span><%= result.artistName %></span> is <span><%= result.degree %></span> degrees away!</p>
+            <% for(let track of result.links) {%>
+                <div class="resultElement">
+                    <p class="resultText"><%= track.trackName %> </p>
+                    <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
+            <%} %> 
+        <% } %>  
+    </div>
+
+    <div class="footerContainer">
+        <div class="footerElement">
+            <a href="/about" class="btn">About Juice</a>
+        </div>
+        <div class="footerElement">
+            <a href="https://github.com/iamnotfelix/humphrey" class="btn">Source Code</a>
+        </div>
+        <div class="footerElement">
+            <a href="https://github.com/" class="btn">About the project</a>
+        </div>
+    </div>
 </body>
 </html>

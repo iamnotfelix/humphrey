@@ -12,6 +12,7 @@ const app = express();
 //app.use(express.static(path.join(__dirname,'/public')));
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -33,7 +34,49 @@ db.once('open', function() {
 
 app.get('/', (req,res) =>
 {
-    res.render('main.ejs');
+    res.render('main.ejs',{result: undefined});
+})
+
+app.get('/about', (req,res) => 
+{
+    res.render('about.ejs');
+});
+
+app.get('/error', (req,res) =>
+{
+    res.send('some error ...');
+})
+
+app.get('/:id', async (req,res) =>
+{
+    const id = req.params.id;
+    if(id)
+    {
+        let dbInfo = await Artist.findOne({artistId: id});
+        if(dbInfo)
+        {
+            let degree = dbInfo.degree;
+            let result = {
+                degree: degree,
+                artistName: dbInfo.name,
+                links: []
+            };
+            while(degree != 0)
+            {
+                const rand = Math.random(); //////////////////for a random reach of artist(work in progress)
+                result.links.push(dbInfo.artistReach[0]);
+                dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[0].artistId});
+                degree = dbInfo.degree;
+            }
+            res.render('main.ejs', {result});
+        }
+        else
+        {
+            console.log('artist not found in database');
+            res.redirect('/error');
+        }
+    }
+    else res.render('main.ejs',{result: undefined});
 })
 
 app.post('/search', async (req,res) =>
@@ -48,37 +91,10 @@ app.post('/search', async (req,res) =>
     else
     {
         const artistId = data.artists.items[0].id;
-        let dbInfo = await Artist.findOne({artistId: artistId}).populate('trackId');
-        if(dbInfo)
-        {
-            let degree = dbInfo.degree;
-            let result = {
-                degree: degree,
-                links: []
-            };
-            //console.log(dbInfo);
-            while(degree != 0)
-            {
-                const rand = Math.random(); //////////////////for a random reach of artist(work in progress)
-                result.links.push(dbInfo.artistReach[0]);
-                dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[0].artistId});
-                degree = dbInfo.degree;
-            }
-            res.render('show.ejs', {result});
-        }
-        else
-        {
-            console.log('artist not found in database');
-            res.redirect('/error');
-        }
+        res.redirect(`/${artistId}`);
     }
     
 });
-
-app.get('/error', (req,res) =>
-{
-    res.send('some error ...');
-})
 
 app.listen(8080, () => 
 {
