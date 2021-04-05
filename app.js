@@ -57,7 +57,7 @@ app.get('/:id', async (req,res) =>
         {
             let degree = dbInfo.degree;
             let result = {
-                degree: degree,
+                degree: degree, 
                 artistName: dbInfo.name,
                 links: []
             };
