@@ -12,6 +12,7 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.6",
+    "ejs-mate": "^3.0.0",
     "execution-time": "^1.4.1",
     "express": "^4.17.1",
     "mongoose": "^5.12.2",

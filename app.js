@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
+const engine = require('ejs-mate');
 
 const { getData } = require('./utils/utils.js');
 const Artist = require('./models/artists.js');
@@ -13,6 +14,8 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
+
+app.engine('ejs', engine);
 
 app.set('views', path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
@@ -44,7 +47,7 @@ app.get('/about', (req,res) =>
 
 app.get('/error', (req,res) =>
 {
-    res.send('some error ...');
+    res.send('some error...');
 })
 
 app.get('/:id', async (req,res) =>
@@ -68,6 +71,7 @@ app.get('/:id', async (req,res) =>
                 dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[0].artistId});
                 degree = dbInfo.degree;
             }
+            console.log('artist found in the database');
             res.render('main.ejs', {result});
         }
         else
@@ -82,18 +86,21 @@ app.get('/:id', async (req,res) =>
 app.post('/search', async (req,res) =>
 {
     const search = req.body.search;
-    const data = await getData(search);
-    if(data.artists.items.length  === 0) 
+    if(search)
     {
-        console.log('artist not found by api'); 
-        res.redirect('/error');
+        const data = await getData(search);
+        if(data.artists.items.length  === 0) 
+        {
+            console.log('artist not found by api'); 
+            res.redirect('/error');
+        }
+        else
+        {
+            const artistId = data.artists.items[0].id;
+            res.redirect(`/${artistId}`);
+        }
     }
-    else
-    {
-        const artistId = data.artists.items[0].id;
-        res.redirect(`/${artistId}`);
-    }
-    
+    else res.redirect('/');
 });
 
 app.listen(8080, () => 

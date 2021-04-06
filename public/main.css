@@ -4,6 +4,7 @@ body
     font-family: 'Poppins', sans-serif;
     background-color: rgb(255, 255, 255);
     margin-bottom: 5rem;
+    /* background-color: rgb(191, 147, 231); */
 }
 
 .container
@@ -150,8 +151,9 @@ iframe
 
 a
 {
-    /* display: inline-block; */
-    /* width: 50%; */
+    display: inline-block;
+    text-align: center;
+    width: 9rem;
 }
 
 .footerElement

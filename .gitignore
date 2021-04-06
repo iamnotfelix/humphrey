@@ -2,3 +2,4 @@ node_modules
 test
 .env
 seedingV2/.env
+toDo.txt
