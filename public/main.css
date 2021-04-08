@@ -143,6 +143,7 @@ header
     font-size: 2rem;
     font-weight: 700;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .navLinks li a
@@ -210,4 +211,126 @@ p a
 .poweredBy:hover
 {
     color: #F9A03F;
+}
+
+@media screen and (max-width: 900px)
+{
+    header
+    {
+        padding: 20px 5%;
+    }
+}
+
+@media screen and (max-width: 850px)
+{
+    .logo
+    {
+        font-size: 5rem;
+    }
+
+    .all
+    {
+        font-size: 1.2em;
+    }
+}
+
+@media screen and (max-width: 725px)
+{
+    .navLinks li{
+        display: block;
+        padding: 10px 30px;
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
+    #search
+    {
+        height: 2.5rem;
+        width: 400px;
+        font-size: 1.2rem;
+    }
+
+    footer
+    {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 0%;
+    }
+
+    .footerLinks ul li
+    {
+        display: block;
+        padding: 0;
+        padding: 5px 0;
+        text-align: center;
+    }
+
+    .footerLinks ul li a
+    {   
+        font-size: 1rem;
+    }
+
+    p a
+    {
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 500px) 
+{
+    .all
+    {
+        font-size: 1.1em;
+        padding: 8rem 0;
+    }
+
+    .navLinks li
+    {
+        padding: 8px 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+    
+    .smallLogo
+    {
+        font-size: 1.8rem;
+    }
+
+    #search
+    {
+        height: 2.5rem;
+        width: 250px;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .logo
+    {
+        font-size: 3.5rem;
+        font-weight: 700;
+    }
+}
+
+@media screen and (max-width: 425px)
+{
+    .all
+    {
+        font-size: 1em;
+    }
+    header
+    {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+    .navLinks
+    {
+        padding-top: 10px;
+    }
+    .navLinks li
+    {
+        text-align: center;
+    }
 }
