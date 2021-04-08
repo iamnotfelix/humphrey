@@ -71,7 +71,7 @@ app.get('/:id', async (req,res) =>
                 dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[0].artistId});
                 degree = dbInfo.degree;
             }
-            console.log('artist found in the database');
+            // console.log('artist found in the database');
             res.render('main.ejs', {result});
         }
         else

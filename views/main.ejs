@@ -1,43 +1,45 @@
-<% layout('boilerplate') %> 
-<div class="container">
-    <div class="innerContainer">
-        <div class="element">
-            <p class="logo">Humphrey</p>
-        </div>
-        <div class="element">
-            <p class="text">How close is your favorite artist to Juice WRLD?</p>
-        </div>
-        <form action="/search" method="POST" class="formContainer">
-            <div class="formElement text">
+<% layout('boilerplate') %>
+ 
+<div class="all">
+    <div class="row">
+        <p class="logo">Humphrey</p>
+    </div>
+    <div class="row">
+        <p>How close is your favorite artist to <span>Juice WRLD</span>?</p>
+    </div>
+    <div class="row">
+        <form action="/search" method="POST" class="rowContainer">
+            <div class="formRow">
                 <label for="search">Search an artist</label>
             </div>
-            <div class="inputElement">
+            <div class="formRow">        
                 <input type="text" id="search" placeholder="Search an artist" name="search">
             </div>
-            <div class="formElement">
+            <div class="formRow">        
                 <button class="btn">Search</button>
             </div>
         </form>
     </div>
-</div>
-
-<div class="resultContainer">
-    <% if(result) {%>
-        <p class="resultText"><span><%= result.artistName %></span> is <span><%= result.degree %></span> degrees away!</p>
-        <% for(let track of result.links) {%>
-            <div class="resultElement">
-                <p class="resultText"><%= track.trackName %> </p>
-                <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <div class="row rowContainer">
+        <% if(result) {%>
+            <div class="rowRow">
+                <p><span><%= result.artistName %></span> is <span><%= result.degree %></span> degrees away!</p>
             </div>
-        <%} %> 
-    <% } %>  
+            <% for(let track of result.links) { %>
+                <div class="rowRow">            
+                    <p><%= track.trackName %> </p>
+                </div>
+                <div class="rowRow">            
+                    <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                </div>
+            <% } %> 
+        <% } %> 
+    </div>
+    <div class="row">
+        <a href="https://developer.spotify.com/documentation/web-api/" class="poweredBy">Powered by Spotify API</a>
+        <a href="https://developer.spotify.com/documentation/web-api/"><img class="spotifyLogo" src="images/spotifyLogoBlack.png" alt="spotify logo"></a>
+    </div>
 </div>
 
-<div class="footerContainer">
-    <div class="footerElement">
-        <a href="/about" class="btn">About</a>
-    </div>
-    <div class="footerElement">
-        <a href="https://github.com/iamnotfelix/humphrey" class="btn">Source Code</a>
-    </div>
-</div>
+
+

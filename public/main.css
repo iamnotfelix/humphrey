@@ -1,162 +1,213 @@
 
+/*body*/
 body
 {
     font-family: 'Poppins', sans-serif;
-    background-color: rgb(255, 255, 255);
-    margin-bottom: 5rem;
-    /* background-color: rgb(191, 147, 231); */
+    box-sizing: border-box;
 }
 
-.container
+/*containers*/
+.all
 {
-    height: 70vh;
+    font-size: 1.4em;
+    padding: 10rem 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
 }
 
-.innerContainer
+.rowContainer
 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
-.formContainer
-{
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
 
-.element
+
+
+/*rows*/
+.row
 {
-    padding: 3rem;
+    padding-top: 3rem;
     margin: auto;
 }
 
+.rowRow
+{
+    padding: 2rem 0;
+    margin: auto;
+}
+
+.formRow
+{
+    padding: 1rem 0;
+    margin: auto;
+}
+
+
+
+
+/*exceptions*/
+div > .rowRow:nth-child(even)
+{
+    border-top: 2px solid #F9A03F;
+}
+
+.row:first-child
+{
+    padding: 0;
+}
+
+
+
+/*elements*/
+span
+{
+    color: #F9A03F;
+}
 .logo
 {
-    font-size: 5rem;
+    color: #F9A03F;
+    font-size: 7rem;
     font-weight: 700;
-    color: #fcba03;
+    padding-bottom: 5rem;
 }
 
-.text
-{
-    font-size: 1.2rem;
-}
 
-.formElement
-{
-    padding: 0.3rem;
-    margin: auto;
-}
 
-.inputElement
-{
-    padding: 0.3rem;
-    width: 100%;
-}
-
+/*search*/
 #search
 {
-    height: 30px;
-    width: 100%;
-    /* margin-top: 1.5rem; */
-    border: none;
-    border-bottom: 2px solid #a7a7a7;
-    border-top: 2px solid #a7a7a7;
+    height: 3rem;
+    width: 600px;
+    border: 0;
+    border-top: 2px solid #ADD4EB;
+    border-bottom: 2px solid #ADD4EB;
     outline: 0;
-    font-size: 1.2rem;
-    /* color: #fcba03; */
-    padding: 7px 0px;
-    background: transparent;
-    transition:  0.5s;
+    font-size: 1.4rem;
+    text-align: center;
+    transition: 0.3s;
 }
 
 #search:hover
 {
-    border-bottom: 2px solid #fcba03;
-    border-top: 2px solid #fcba03;
+    cursor: text;
+    border-top: 2px solid #F9A03F;
+    border-bottom: 2px solid #F9A03F;
 }
 
+/*button*/
 .btn
 {
-    -webkit-appearance: none;
-    appearance: none;
-    text-decoration: none;
     border: none;
+    width: 200px;
+    height: 3rem;
+    font-size: 1.4rem;
+    border-radius: 50px;
+    background-color: #ADD4EB;
     outline: 0;
-    color: black;
-    margin-top: 1rem;
-    padding: 0.8rem 3rem;
-    background-color: #C8C8C8;
-    font-size: 1.2rem;
-    transition: background-color 0.5s;
+    transition: 0.6s;
+    /* color: #F9A03F;  */
 }
 
 .btn:hover
 {
-    background-color: #fcba03;
+    cursor: pointer;
+    background-color: #F9A03F;
+    /* height: 4rem; */
+    width: 230px;
 }
 
-.resultContainer
+
+
+/*header nav*/
+header
 {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    padding-bottom: 5rem;
+    padding: 20px 10%;
+    background-color: #2A262B;
 }
 
-.resultElement
+.navLinks li{
+    display: inline-block;
+    padding: 0px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.smallLogo
+{
+    color: #F9A03F;
+    font-size: 2rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.navLinks li a
+{
+    color: #ADD4EB;
+    text-decoration: none;
+    transition: all 0.6s ease 0s;
+}
+
+.navLinks li a:hover
+{
+    color: #F9A03F;
+}
+
+/*footer nav*/
+
+footer
 {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 40%;
-    padding: 2rem 2rem;
-    border-top: 2px solid #fcba03;
-    /* border-bottom: 2px solid #fcba03; */
+    justify-content: space-around;
+    align-items: center;
+    padding: 30px 0%;
+    background-color: #2A262B;
 }
 
-.resultText
-{
-    font-size: 1.5rem;
-    padding-bottom: 1.5rem;
-    margin: auto;
-}
-
-span
-{
-    color: #fcba03;
-    font-weight: bold;
-}
-
-iframe
-{
-    display: block;
-    margin: auto;
-}
-
-.footerContainer
-{
-    display: flex;
-    justify-content: center;
-}
-
-a
+.footerLinks ul li
 {
     display: inline-block;
-    text-align: center;
-    width: 9rem;
 }
 
-.footerElement
+.footerLinks ul li a
+{   
+    text-decoration: none;
+    color: #637783;
+    padding: 0 50px;
+    font-size: 1.1rem;
+}
+
+p a
 {
-    padding: 0.5rem;
+    text-decoration: none;
+    color: #637783;
+    font-size: 1.1rem;
+}
+
+/*powered by*/
+.spotifyLogo
+{
+    padding-top: 10px;
+    display: block;
+    width: 80px;
+    text-align: center;
+    margin: auto;
+    transition: all 0.6s;
+}
+
+.poweredBy
+{
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: black;
+    transition: all 0.6s ease 0s;
+}
+
+.poweredBy:hover
+{
+    color: #F9A03F;
 }
