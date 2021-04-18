@@ -8,6 +8,7 @@ const APIControler = async () =>
 {
     const _getToken = async() =>
     {
+        //console.log('asdf');
         const url = 'https://accounts.spotify.com/api/token';
         const client = Buffer.from(client_id + ':' + client_secret).toString('base64');
         
@@ -27,10 +28,10 @@ const APIControler = async () =>
         return data.access_token;  
     }
 
-    const _getArtist = async (token,artistName) =>
+    const _getArtist = async (token, artistId) =>
     {
         const type='artist'
-        const url = `https://api.spotify.com/v1/search?q=${artistName}&type=${type}`;
+        const url = `https://api.spotify.com/v1/artists/${artistId}`;
         const options = 
         {
             method: 'GET',
@@ -42,10 +43,7 @@ const APIControler = async () =>
         const result = await fetch(url, options);
         const data = await result.json();
         //console.log(data);
-        return {
-            followers: data.artists.items[0].followers.total,
-            popularity: data.artists.items[0].popularity
-        };
+        return data.name;
     }
 
     const _getArtistAlbums = async (token, artistId, offset) =>
@@ -53,7 +51,7 @@ const APIControler = async () =>
         
         const market = 'RO';
         const limit = 20;
-        const url = `https://api.spotify.com/v1/artists/${artistId}/albums?market=${market}&limit=${limit}&offset=${offset}&include_groups=album,single`;
+        const url = `https://api.spotify.com/v1/artists/${artistId}/albums?market=${market}&limit=${limit}&offset=${offset}&include_groups=album,single,appears_on`;
         const options = 
         {
             method: 'GET',
@@ -115,16 +113,8 @@ const APIControler = async () =>
                             }
                         })
                     }
-                    let egal = false;
-                    if(tracks)
-                    {
-                        tracks.forEach((element) => { egal = (egal || (trackArtist.trackName == element.trackName)); });
-                    }
-
-                    if(!egal)
-                    {
+                    if(!tracks.some(track => track.trackName === trackArtist.trackName))
                         tracks.push(trackArtist);
-                    }
                 }
             }
         }
@@ -148,13 +138,13 @@ module.exports.getData = async (artistId, offset, tok = undefined) => //artistNa
     //console.log(token);
     const albums = await control.getArtistAlbums(token, artistId, offset);
     const tracks = await control.getTracksAndArtists(token, albums.albums);
-
     return {
         tracks: tracks, 
         _offset: albums._offset,
         token: token
     };
 };
+
 //4MCBfE4596Uoi2O4DtmEMz
 /*
 example of what i need to do in other file if i include these functions:

@@ -22,15 +22,21 @@
     </div>
     <div class="row rowContainer">
         <% if(result) {%>
-            <div class="rowRow">
-                <p><span><%= result.artistName %></span> is <span><%= result.degree %></span> degrees away!</p>
-            </div>
-            <% for(let track of result.links) { %>
-                <div class="rowRow">            
-                    <p><%= track.trackName %> </p>
+            <% if(result.links) {%> 
+                <div class="rowRow">
+                    <p><span><%= result.artistName %></span> is <span><%= result.degree %></span> degrees away!</p>
                 </div>
-                <div class="rowRow">            
-                    <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                <% for(let track of result.links) { %>
+                    <div class="rowRow">            
+                        <p><%= track.trackName %> </p>
+                    </div>
+                    <div class="rowRow">            
+                        <iframe src="https://open.spotify.com/embed/track/<%= track.trackId %>" width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    </div>
+                <% } %> 
+            <% } else {%>
+                <div class="rowRow">
+                    <p><%= result %></p>
                 </div>
             <% } %> 
         <% } %> 

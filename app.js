@@ -10,7 +10,6 @@ const Artist = require('./models/artists.js');
 
 const app = express();
 
-//app.use(express.static(path.join(__dirname,'/public')));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
@@ -40,9 +39,9 @@ app.get('/', (req,res) =>
     res.render('main.ejs',{result: undefined});
 })
 
-app.get('/about', (req,res) => 
+app.get('/juiceWRLD', (req,res) => 
 {
-    res.render('about.ejs');
+    res.render('juiceWRLD.ejs');
 });
 
 app.get('/error', (req,res) =>
@@ -66,18 +65,17 @@ app.get('/:id', async (req,res) =>
             };
             while(degree != 0)
             {
-                const rand = Math.random(); //////////////////for a random reach of artist(work in progress)
-                result.links.push(dbInfo.artistReach[0]);
-                dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[0].artistId});
+                const rand = Math.floor( Math.random() * dbInfo.artistReach.length); //////////////////for a random reach of artist(work in progress)
+                result.links.push(dbInfo.artistReach[rand]);
+                dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[rand].artistId});
                 degree = dbInfo.degree;
             }
-            // console.log('artist found in the database');
             res.render('main.ejs', {result});
         }
         else
         {
             console.log('artist not found in database');
-            res.redirect('/error');
+            res.render('main.ejs',{result: 'Artist not found'});
         }
     }
     else res.render('main.ejs',{result: undefined});
@@ -92,7 +90,7 @@ app.post('/search', async (req,res) =>
         if(data.artists.items.length  === 0) 
         {
             console.log('artist not found by api'); 
-            res.redirect('/error');
+            res.render('main.ejs',{result: 'Artist not found'});
         }
         else
         {

@@ -9,6 +9,7 @@ let forError;
 
 perf.start();
 
+//mongoose.connect('mongodb://localhost:27017/spotify-api-project', 
 mongoose.connect('mongodb://localhost:27017/spotify-api-project', 
 {
     useNewUrlParser: true, 
@@ -62,11 +63,12 @@ const getCacheData = () =>
 
 const seedDB = async () =>
 {
-    const cache = getCacheData();
-    const currentDegree = cache.degree;
-    const restIds = cache.ids;
-    const wasError = cache.error; 
+    const cache = getCacheData(),
+    currentDegree = cache.degree,
+    restIds = cache.ids,
+    wasError = cache.error; 
 
+    //await Artist.deleteMany({degree: {$gte: currentDegree} });
     //if(wasError || currentDegree === 0) await Artist.deleteMany({degree: {$gte: currentDegree} });
     //else 
         //await Artist.deleteMany({degree: {$gt: currentDegree} });
@@ -82,9 +84,9 @@ const seedDB = async () =>
     
     const rawIds = await Artist.find({degree: currentDegree});              //search all the artist in the db with the specified degree
     let ids;                                                                //gets an array of all the artists that are children to the current one
-    if(wasError) ids = restIds.map(element => element );
+    if(wasError) ids = restIds;//restIds.map(element => element );
     else ids = rawIds.map( element => element.artistId );
-    console.log(ids)
+    console.log(ids);
     forError = ids.map(element => element );
     forError.splice(0,0,currentDegree);
     
@@ -92,18 +94,18 @@ const seedDB = async () =>
     for(let id of ids)                                          //iterrate over the artists ids
     {
         const data = await getAllData(id);                      //gets an array of all the tracks of the current artist
-        //console.log(data);
         let i = 1;
         for(let track of data)                                  //iterrate over all tracks
         {
-            if(i === 20) break;
+            //if(i === 10) break;
+            if(track.artists.some(artist => artist.artistId === id))
             for(let artist of track.artists)                    //iterrate over all the artists on the current track
             {   
                 if(artist.artistId != id)                       //check if the current artist is different from the father
                 {
-                    const found = await Artist.find({artistId: artist.artistId});   //search the artist in the database
+                    const found = await Artist.findOne({artistId: artist.artistId});   //search the artist in the database
                         
-                    if(found.length === 0)                       //if the artist is new
+                    if(!found)                       //if the artist is new
                     {   
                         const newArtist = new Artist(                //create a new artist object
                         {
@@ -124,13 +126,20 @@ const seedDB = async () =>
                     }
                     else                                        //if the artist is not new
                     {
+                        //console.log(found, track.trackName);
                         const add = 
                         {
                             trackId: track.trackId,
                             trackName: track.trackName,
                             artistId: id
                         }
-                        await Artist.findOneAndUpdate({_id: found._id}, { $push: { artistReach: add }}); //add to reachable artist of the artist the new track
+                        
+                        if(!found.artistReach.some( element => element.trackName === add.trackName) && found.degree === currentDegree + 1)
+                        {
+                            found.artistReach.push(add);
+                            const x = await found.save();               //add to reachable artist of the artist the new track
+                            //console.log(x);
+                        }                        
                     }
                 }
             }
