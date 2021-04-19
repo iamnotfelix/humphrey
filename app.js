@@ -21,7 +21,9 @@ app.set('view engine', 'ejs');
 
 app.use(express.urlencoded());
 
-mongoose.connect('mongodb://localhost:27017/spotify-api-project', 
+const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/spotify-api-project';
+
+mongoose.connect(mongoUrl, 
 {
     useNewUrlParser: true, 
     useUnifiedTopology: true,
@@ -65,7 +67,7 @@ app.get('/:id', async (req,res) =>
             };
             while(degree != 0)
             {
-                const rand = Math.floor( Math.random() * dbInfo.artistReach.length); //////////////////for a random reach of artist(work in progress)
+                const rand = Math.floor( Math.random() * dbInfo.artistReach.length);
                 result.links.push(dbInfo.artistReach[rand]);
                 dbInfo = await Artist.findOne({artistId: dbInfo.artistReach[rand].artistId});
                 degree = dbInfo.degree;
@@ -101,7 +103,9 @@ app.post('/search', async (req,res) =>
     else res.redirect('/');
 });
 
-app.listen(8080, () => 
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => 
 {
-    console.log('Server listening at 8080');
+    console.log(`Server listening at ${port}`);
 });
