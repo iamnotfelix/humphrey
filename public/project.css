@@ -1,0 +1,44 @@
+
+.projectContainer
+{
+    display: flex;
+    flex-direction: column;
+    min-height: 1000px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.projectContainer p{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.4rem;
+}
+
+p.mainText
+{
+    margin: auto;
+}
+
+p.plug
+{
+    padding: 50px;
+}
+
+.projectContainer a
+{
+    text-decoration: none;
+    color: #F9A03F;
+    font-size: 1.4rem;
+}
+
+.projectContainer img
+{
+    width: 1.2rem;
+}
+
+.line
+{
+    height: 2px;
+    background-color: #F9A03F;
+}

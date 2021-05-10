@@ -41,6 +41,11 @@ app.get('/', (req,res) =>
     res.render('main.ejs',{result: undefined});
 })
 
+app.get('/project', (req,res) =>
+{
+    res.render('project.ejs');
+});
+
 app.get('/juiceWRLD', (req,res) => 
 {
     res.render('juiceWRLD.ejs');
